@@ -24,7 +24,7 @@ Description
 * [nglview](http://nglviewer.org/#nglview): Jupyter/IPython widget to interactively view molecular structures and trajectories in notebooks.
 * [ipywidgets](https://github.com/jupyter-widgets/ipywidgets): Interactive HTML widgets for Jupyter notebooks and the IPython kernel.
 
-### Conda Installation and Launch
+### Conda Installation
 
 ```console
 git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
@@ -33,7 +33,32 @@ conda env create -f conda_env/environment.yml
 conda activate biobb_VS_tutorial
 jupyter-nbextension enable --py --user widgetsnbextension
 jupyter-nbextension enable --py --user nglview
-jupyter-notebook biobb_wf_virtual-screening/notebooks/biobb_VS_tutorial.ipynb
+```
+
+### Launch
+
+#### EBI REST API tutorial
+
+```console
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipynb
+```
+
+#### fpocket tutorial
+
+```console
+jupyter-notebook biobb_wf_virtual-screening/notebooks/fpocket/wf_vs_fpocket.ipynb
+```
+
+#### ligand tutorial
+
+```console
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ligand/wf_vs_ligand.ipynb
+```
+
+#### no ligand tutorial
+
+```console
+jupyter-notebook biobb_wf_virtual-screening/notebooks/no_ligand/wf_vs_no_ligand.ipynb
 ```
 
 ***
