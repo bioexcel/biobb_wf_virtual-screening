@@ -1,0 +1,11 @@
+name: biobb_VS_tutorial
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - biobb_io==3.5.1
+  - biobb_structure_utils==3.5.2
+  - biobb_vs==3.5.0
+  - biobb_chemistry==3.5.0
+  - nglview
+  - conda

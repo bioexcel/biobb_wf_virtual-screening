@@ -1,0 +1,12 @@
+guidelines.md
+*.pdb
+*.sdf
+*.pdbqt
+*.log
+*.json
+*.zip
+*.pqr
+log*.*
+!logo.png
+.ipynb_checkpoints/
+biobb_wf_virtual-screening/notebooks/*/*/
