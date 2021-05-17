@@ -123,7 +123,7 @@ view._remote_call('setSize', target='Widget', args=['','600px'])
 view
 ```
 
-<img src='ngl1.png'></img>
+<img src='_static/ebi_api/ngl1.png'></img>
 
 <a id="extractProtein"></a>
 ***
@@ -162,7 +162,7 @@ view._remote_call('setSize', target='Widget', args=['','600px'])
 view
 ```
 
-<img src='ngl2.png'></img>
+<img src='_static/ebi_api/ngl2.png'></img>
 
 <a id="pdbe"></a>
 ***
@@ -259,7 +259,7 @@ view._remote_call('setSize', target='Widget', args=['','600px'])
 view
 ```
 
-<img src='ngl3.png'></img>
+<img src='_static/ebi_api/ngl3.png'></img>
 
 <a id="cavityBox"></a>
 ***
@@ -353,7 +353,7 @@ view._remote_call('setSize', target='Widget', args=['','600px'])
 view
 ```
 
-<img src='ngl4.png'></img>
+<img src='_static/ebi_api/ngl4.png'></img>
 
 <a id="downloadSmallMolecule"></a>
 ***
@@ -458,7 +458,7 @@ v0.observe(on_change, ['_camera_orientation'])
 HBox([v0, v1])
 ```
 
-<img src='ngl5.png'></img>
+<img src='_static/ebi_api/ngl5.png'></img>
 
 <a id="protein_pdb2pdbqt"></a>
 ***
@@ -546,7 +546,7 @@ v0.observe(on_change, ['_camera_orientation'])
 HBox([v0, v1])
 ```
 
-<img src='ngl6.png'></img>
+<img src='_static/ebi_api/ngl6.png'></img>
 
 <a id="selectPose"></a>
 ### Select Docking Pose
@@ -694,7 +694,7 @@ view._execute_js_code(code)
 view
 ```
 
-<img src='ngl7.png'></img>
+<img src='_static/ebi_api/ngl7.png'></img>
 
 ***
 <a id="questions"></a>
