@@ -70,9 +70,9 @@ jupyter-notebook biobb_wf_virtual-screening/notebooks/fpocket/wf_vs_fpocket.ipyn
 
 ***
 
-## Tutorial
+## Tutorials
 
-Click here to [view tutorial in Read the Docs]()
+Click here to [view tutorials in Read the Docs](https://biobb-wf-virtual-screening.readthedocs.io/en/latest/)
 
 ***
 
