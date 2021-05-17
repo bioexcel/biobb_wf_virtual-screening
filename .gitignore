@@ -10,3 +10,6 @@ log*.*
 !logo.png
 .ipynb_checkpoints/
 biobb_wf_virtual-screening/notebooks/*/*/
+biobb_wf_virtual-screening/notebooks/*/*.web.ipynb
+biobb_wf_virtual-screening/notebooks/*/*.docs.ipynb
+biobb_wf_virtual-screening/notebooks/*/*.png
