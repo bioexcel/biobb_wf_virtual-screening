@@ -66,7 +66,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'biobb_wf_md_setup'
-copyright = u'2020, Bioexcel Project'
+copyright = u'2021, Bioexcel Project'
 author = u'Bioexcel Project'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -125,7 +125,7 @@ todo_include_todos = False
 
 # -- Options for HTML output ----------------------------------------------
 def setup(app):
-    app.add_stylesheet('theme_overrides.css')
+    app.add_css_file('theme_overrides.css')
     app.add_js_file('theme_overrides.js')
 
 
