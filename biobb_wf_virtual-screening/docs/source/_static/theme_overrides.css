@@ -20,6 +20,8 @@ a:visited { color:#9e8830; }
 .wy-side-nav-search>a:hover { background:none; }
 .wy-side-nav-search>div.version { color:rgba(255, 255, 255, 1); }
 
+.section#settings { margin-top: 20px; }
+
 /* !!! */
 .ethical-rtd.ethical-dark-theme { display: none; }
 
