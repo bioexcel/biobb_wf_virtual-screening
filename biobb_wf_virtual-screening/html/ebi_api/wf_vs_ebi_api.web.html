@@ -14424,7 +14424,7 @@ The <strong>protein structure</strong> will be used as a <strong>target</strong>
 <hr>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-structure-utils.readthedocs.io/en/latest/utils.html#module-utils.extract_protein">extract_protein</a> from <strong>biobb_structure_utils.utils.extract_protein</strong></li>
+<li><a href="https://biobb-structure-utils.readthedocs.io/en/latest/utils.html#module-utils.extract_molecule">extract_molecule</a> from <strong>biobb_structure_utils.utils.extract_molecule</strong></li>
 </ul>
 <hr>
 
@@ -14435,11 +14435,11 @@ The <strong>protein structure</strong> will be used as a <strong>target</strong>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_structure_utils.utils.extract_protein</span> <span class="kn">import</span> <span class="n">extract_protein</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_structure_utils.utils.extract_molecule</span> <span class="kn">import</span> <span class="n">extract_molecule</span>
 
 <span class="n">pdb_protein</span> <span class="o">=</span> <span class="s2">&quot;pdb_protein.pdb&quot;</span>
 
-<span class="n">extract_protein</span><span class="p">(</span><span class="n">input_structure_path</span><span class="o">=</span><span class="n">download_pdb</span><span class="p">,</span>
+<span class="n">extract_molecule</span><span class="p">(</span><span class="n">input_structure_path</span><span class="o">=</span><span class="n">download_pdb</span><span class="p">,</span>
              <span class="n">output_protein_path</span> <span class="o">=</span> <span class="n">pdb_protein</span><span class="p">)</span>
 </pre></div>
 
@@ -14494,7 +14494,7 @@ Although in this particular example we already know the <strong>binding site</st
 <hr>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-io.readthedocs.io/en/latest/api.html#module-api.binding_site">binding_site</a> from <strong>biobb_io.api.binding_site</strong></li>
+<li><a href="https://biobb-io.readthedocs.io/en/latest/api.html#module-api.api_binding_site">api_binding_site</a> from <strong>biobb_io.api.api_binding_site</strong></li>
 </ul>
 <hr>
 
@@ -14505,14 +14505,14 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_io.api.binding_site</span> <span class="kn">import</span> <span class="n">binding_site</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_io.api.api_binding_site</span> <span class="kn">import</span> <span class="n">api_binding_site</span>
 
 <span class="n">residues_json</span> <span class="o">=</span> <span class="s2">&quot;residues.json&quot;</span>
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&quot;pdb_code&quot;</span><span class="p">:</span> <span class="n">pdb_code</span>
 <span class="p">}</span>
 
-<span class="n">binding_site</span><span class="p">(</span><span class="n">output_json_path</span><span class="o">=</span><span class="n">residues_json</span><span class="p">,</span>
+<span class="n">api_binding_site</span><span class="p">(</span><span class="n">output_json_path</span><span class="o">=</span><span class="n">residues_json</span><span class="p">,</span>
     <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
 
@@ -14966,7 +14966,7 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 <hr>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina">autodock_vina</a> from <strong>biobb_vs.vina.autodock_vina</strong></li>
+<li><a href="https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina_run">autodock_vina_run</a> from <strong>biobb_vs.vina.autodock_vina_run</strong></li>
 </ul>
 <hr>
 
@@ -14977,12 +14977,12 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.vina.autodock_vina</span> <span class="kn">import</span> <span class="n">autodock_vina</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.vina.autodock_vina_run</span> <span class="kn">import</span> <span class="n">autodock_vina_run</span>
 
 <span class="n">output_vina_pdbqt</span> <span class="o">=</span> <span class="s2">&quot;output_vina.pdbqt&quot;</span>
 <span class="n">output_vina_log</span> <span class="o">=</span> <span class="s2">&quot;output_vina.log&quot;</span>
 
-<span class="n">autodock_vina</span><span class="p">(</span><span class="n">input_ligand_pdbqt_path</span> <span class="o">=</span> <span class="n">prep_ligand</span><span class="p">,</span>
+<span class="n">autodock_vina_run</span><span class="p">(</span><span class="n">input_ligand_pdbqt_path</span> <span class="o">=</span> <span class="n">prep_ligand</span><span class="p">,</span>
              <span class="n">input_receptor_pdbqt_path</span> <span class="o">=</span> <span class="n">prep_receptor</span><span class="p">,</span>
              <span class="n">input_box_path</span> <span class="o">=</span> <span class="n">output_box</span><span class="p">,</span>
             <span class="n">output_pdbqt_path</span> <span class="o">=</span> <span class="n">output_vina_pdbqt</span><span class="p">,</span>

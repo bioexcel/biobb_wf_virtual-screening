@@ -132,17 +132,17 @@ Extract **protein structure** from the **downloaded PDB file**. Removing **any e
 The **protein structure** will be used as a **target** in the **protein-ligand docking process**. 
 ***
 **Building Blocks** used:
- - [extract_protein](https://biobb-structure-utils.readthedocs.io/en/latest/utils.html#module-utils.extract_protein) from **biobb_structure_utils.utils.extract_protein**
+ - [extract_molecule](https://biobb-structure-utils.readthedocs.io/en/latest/utils.html#module-utils.extract_molecule) from **biobb_structure_utils.utils.extract_molecule**
 ***
 
 
 ```python
-from biobb_structure_utils.utils.extract_protein import extract_protein
+from biobb_structure_utils.utils.extract_molecule import extract_molecule
 
 pdb_protein = "pdb_protein.pdb"
 
-extract_protein(input_structure_path=download_pdb,
-             output_protein_path = pdb_protein)
+extract_molecule(input_structure_path=download_pdb,
+             output_molecule_path = pdb_protein)
 ```
 
 <a id="vis3D"></a>
@@ -507,17 +507,17 @@ using **AutoDock Vina**. <br>
 
 ***
 **Building Blocks** used:
- - [autodock_vina](https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina) from **biobb_vs.vina.autodock_vina**
+ - [autodock_vina_run](https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina_run) from **biobb_vs.vina.autodock_vina_run**
 ***
 
 
 ```python
-from biobb_vs.vina.autodock_vina import autodock_vina
+from biobb_vs.vina.autodock_vina_run import autodock_vina_run
 
 output_vina_pdbqt = "output_vina.pdbqt"
 output_vina_log = "output_vina.log"
 
-autodock_vina(input_ligand_pdbqt_path = prep_ligand,
+autodock_vina_run(input_ligand_pdbqt_path = prep_ligand,
              input_receptor_pdbqt_path = prep_receptor,
              input_box_path = output_box,
             output_pdbqt_path = output_vina_pdbqt,
