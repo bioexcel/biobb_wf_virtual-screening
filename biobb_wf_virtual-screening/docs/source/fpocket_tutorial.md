@@ -180,12 +180,12 @@ Although in this particular example we already know the **binding site** region,
 <br>
 ***
 **Building Blocks** used:
- - [fpocket](https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket) from **biobb_vs.fpocket.fpocket**
+ - [fpocket](https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run) from **biobb_vs.fpocket.fpocket_run**
 ***
 
 
 ```python
-from biobb_vs.fpocket.fpocket import fpocket
+from biobb_vs.fpocket.fpocket_run import fpocket_run
 
 fpocket_all_pockets = "fpocket_all_pockets.zip"
 fpocket_summary = "fpocket_summary.json"
@@ -195,10 +195,10 @@ prop = {
     "num_spheres": 35
 }
 
-fpocket(input_pdb_path=pdb_protein,
-        output_pockets_zip = fpocket_all_pockets,
-        output_summary=fpocket_summary,
-        properties=prop)
+fpocket_run(input_pdb_path=pdb_protein,
+            output_pockets_zip = fpocket_all_pockets,
+            output_summary=fpocket_summary,
+            properties=prop)
 ```
 
 <a id="checkJson"></a>

@@ -14503,7 +14503,7 @@ Although in this particular example we already know the <strong>binding site</st
 <hr>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket">fpocket</a> from <strong>biobb_vs.fpocket.fpocket</strong></li>
+<li><a href="https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run">fpocket_run</a> from <strong>biobb_vs.fpocket.fpocket_run</strong></li>
 </ul>
 <hr>
 
@@ -14514,7 +14514,7 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.fpocket.fpocket</span> <span class="kn">import</span> <span class="n">fpocket</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.fpocket.fpocket_run</span> <span class="kn">import</span> <span class="n">fpocket_run</span>
 
 <span class="n">fpocket_all_pockets</span> <span class="o">=</span> <span class="s2">&quot;fpocket_all_pockets.zip&quot;</span>
 <span class="n">fpocket_summary</span> <span class="o">=</span> <span class="s2">&quot;fpocket_summary.json&quot;</span>
@@ -14524,7 +14524,7 @@ Although in this particular example we already know the <strong>binding site</st
     <span class="s2">&quot;num_spheres&quot;</span><span class="p">:</span> <span class="mi">35</span>
 <span class="p">}</span>
 
-<span class="n">fpocket</span><span class="p">(</span><span class="n">input_pdb_path</span><span class="o">=</span><span class="n">pdb_protein</span><span class="p">,</span>
+<span class="n">fpocket_run</span><span class="p">(</span><span class="n">input_pdb_path</span><span class="o">=</span><span class="n">pdb_protein</span><span class="p">,</span>
         <span class="n">output_pockets_zip</span> <span class="o">=</span> <span class="n">fpocket_all_pockets</span><span class="p">,</span>
         <span class="n">output_summary</span><span class="o">=</span><span class="n">fpocket_summary</span><span class="p">,</span>
         <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
