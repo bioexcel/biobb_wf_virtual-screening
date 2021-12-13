@@ -31,7 +31,7 @@ Please note that **docking algorithms**, and in particular, **AutoDock Vina** pr
 
 ```console
 git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
-cd biobb_wf_virtual_screening
+cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
 conda activate biobb_VS_tutorial
 jupyter-nbextension enable --py --user widgetsnbextension
