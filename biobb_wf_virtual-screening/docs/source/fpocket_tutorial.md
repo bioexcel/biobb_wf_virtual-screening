@@ -37,7 +37,7 @@ conda env create -f conda_env/environment.yml
 conda activate biobb_VS_tutorial
 jupyter-nbextension enable --py --user widgetsnbextension
 jupyter-nbextension enable --py --user nglview
-jupyter-notebook biobb_wf_virtual_screening/notebooks/fpocket/wf_vs_fpocket.ipynb
+jupyter-notebook biobb_wf_virtual-screening/notebooks/fpocket/wf_vs_fpocket.ipynb
   ``` 
 
 ***
