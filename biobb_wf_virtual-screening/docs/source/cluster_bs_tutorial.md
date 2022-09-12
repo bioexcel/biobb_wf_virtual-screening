@@ -34,10 +34,15 @@ git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
 cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
 conda activate biobb_VS_tutorial
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipynb
+``` 
+
+Please execute the following commands before launching the Jupyter Notebook if you experience some issues with widgets such as NGL View (3D molecular visualization):
+
+```console
 jupyter-nbextension enable --py --user widgetsnbextension
 jupyter-nbextension enable --py --user nglview
-jupyter-notebook biobb_wf_virtual-screening/notebooks/clusterBindingSite/wf_vs_clusterBindingSite.ipynb
-  ``` 
+```
 
 ***
 ## Pipeline steps
@@ -503,7 +508,9 @@ Running the **docking process** with the prepared files:
 - **target protein**
 - **binding site box**<br>
 
-using **AutoDock Vina**. <br>
+using **AutoDock Vina**. <br><br>
+
+<div style="background:#f3c200; padding: 15px;"><strong>Important:</strong> At the time of publishing the current version, <strong>autodock_vina has not been compiled for the new ARM mac M1/M2 chips</strong>. So the vina.autodock_vina_run tool doesn't work in these computers.</div>
 
 ***
 **Building Blocks** used:
