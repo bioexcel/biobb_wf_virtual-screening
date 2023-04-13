@@ -14993,7 +14993,7 @@ In this particular example, the small molecule of interest is the FDA-approved d
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;input_format&quot;</span><span class="p">:</span> <span class="s2">&quot;sdf&quot;</span><span class="p">,</span>
     <span class="s2">&quot;output_format&quot;</span><span class="p">:</span> <span class="s2">&quot;pdb&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;obabel_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
+    <span class="s2">&quot;binary_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
 <span class="p">}</span>
 
 <span class="n">babel_convert</span><span class="p">(</span><span class="n">input_path</span> <span class="o">=</span> <span class="n">sdf_ideal</span><span class="p">,</span>
@@ -15034,7 +15034,7 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;input_format&quot;</span><span class="p">:</span> <span class="s2">&quot;pdb&quot;</span><span class="p">,</span>
     <span class="s2">&quot;output_format&quot;</span><span class="p">:</span> <span class="s2">&quot;pdbqt&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;obabel_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
+    <span class="s2">&quot;binary_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
 <span class="p">}</span>
 
 <span class="n">babel_convert</span><span class="p">(</span><span class="n">input_path</span> <span class="o">=</span> <span class="n">ligand</span><span class="p">,</span>
@@ -15141,7 +15141,6 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 <li><strong>binding site box</strong><br></li>
 </ul>
 <p>using <strong>AutoDock Vina</strong>. <br> <br></p>
-<div style="background:#f3c200; padding: 15px;"><strong>Important:</strong> At the time of publishing the current version, <strong>autodock_vina has not been compiled for the new ARM mac M1/M2 chips</strong>. So the vina.autodock_vina_run tool doesn't work in these computers.</div>
 <hr>
 <hr>
 <p><strong>Building Blocks</strong> used:</p>
@@ -15161,12 +15160,14 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 
 <span class="n">output_vina_pdbqt</span> <span class="o">=</span> <span class="s2">&quot;output_vina.pdbqt&quot;</span>
 <span class="n">output_vina_log</span> <span class="o">=</span> <span class="s2">&quot;output_vina.log&quot;</span>
+<span class="n">prop</span> <span class="o">=</span> <span class="p">{</span> <span class="p">}</span>
 
 <span class="n">autodock_vina_run</span><span class="p">(</span><span class="n">input_ligand_pdbqt_path</span> <span class="o">=</span> <span class="n">prep_ligand</span><span class="p">,</span>
              <span class="n">input_receptor_pdbqt_path</span> <span class="o">=</span> <span class="n">prep_receptor</span><span class="p">,</span>
              <span class="n">input_box_path</span> <span class="o">=</span> <span class="n">output_box</span><span class="p">,</span>
              <span class="n">output_pdbqt_path</span> <span class="o">=</span> <span class="n">output_vina_pdbqt</span><span class="p">,</span>
-             <span class="n">output_log_path</span> <span class="o">=</span> <span class="n">output_vina_log</span><span class="p">)</span>
+             <span class="n">output_log_path</span> <span class="o">=</span> <span class="n">output_vina_log</span><span class="p">,</span>
+             <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -15325,7 +15326,7 @@ Choose a <strong>docking pose</strong> from the <strong>DropDown list</strong>.<
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;input_format&quot;</span><span class="p">:</span> <span class="s2">&quot;pdbqt&quot;</span><span class="p">,</span>
     <span class="s2">&quot;output_format&quot;</span><span class="p">:</span> <span class="s2">&quot;pdb&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;obabel_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
+    <span class="s2">&quot;binary_path&quot;</span><span class="p">:</span> <span class="s2">&quot;obabel&quot;</span>
 <span class="p">}</span>
 
 <span class="n">babel_convert</span><span class="p">(</span><span class="n">input_path</span> <span class="o">=</span> <span class="n">output_pdbqt_model</span><span class="p">,</span>

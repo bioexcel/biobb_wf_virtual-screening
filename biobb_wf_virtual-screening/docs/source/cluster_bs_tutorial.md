@@ -412,7 +412,7 @@ ligand = "ligand.pdb"
 prop = {
     "input_format": "sdf",
     "output_format": "pdb",
-    "obabel_path": "obabel"
+    "binary_path": "obabel"
 }
 
 babel_convert(input_path = sdf_ideal,
@@ -440,7 +440,7 @@ prep_ligand = "prep_ligand.pdbqt"
 prop = {
     "input_format": "pdb",
     "output_format": "pdbqt",
-    "obabel_path": "obabel"
+    "binary_path": "obabel"
 }
 
 babel_convert(input_path = ligand,
@@ -510,8 +510,6 @@ Running the **docking process** with the prepared files:
 
 using **AutoDock Vina**. <br><br>
 
-<div style="background:#f3c200; padding: 15px;"><strong>Important:</strong> At the time of publishing the current version, <strong>autodock_vina has not been compiled for the new ARM mac M1/M2 chips</strong>. So the vina.autodock_vina_run tool doesn't work in these computers.</div>
-
 ***
 **Building Blocks** used:
  - [autodock_vina_run](https://biobb-vs.readthedocs.io/en/latest/vina.html#module-vina.autodock_vina_run) from **biobb_vs.vina.autodock_vina_run**
@@ -523,12 +521,14 @@ from biobb_vs.vina.autodock_vina_run import autodock_vina_run
 
 output_vina_pdbqt = "output_vina.pdbqt"
 output_vina_log = "output_vina.log"
+prop = { }
 
 autodock_vina_run(input_ligand_pdbqt_path = prep_ligand,
              input_receptor_pdbqt_path = prep_receptor,
              input_box_path = output_box,
-            output_pdbqt_path = output_vina_pdbqt,
-             output_log_path = output_vina_log)
+             output_pdbqt_path = output_vina_pdbqt,
+             output_log_path = output_vina_log,
+             properties = prop)
 ```
 
 <a id="viewDocking"></a>
@@ -630,7 +630,7 @@ output_pdb_model = "output_model.pdb"
 prop = {
     "input_format": "pdbqt",
     "output_format": "pdb",
-    "obabel_path": "obabel"
+    "binary_path": "obabel"
 }
 
 babel_convert(input_path = output_pdbqt_model,
