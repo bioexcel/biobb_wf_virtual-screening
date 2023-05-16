@@ -312,7 +312,7 @@ pocketNames.sort(key=lambda tup: tup[1])
 for pock in path_pockets_pdb:
     g = re.findall('(?:pocket)(\d+)(?:_\w+)\.(\w+)', pock)
     i = g[0][0]
-    c[i].add_surface(color='#%02X%02X%02X' % (r(),r(),r()),  
+    c[i].add_surface(color='#{}'.format((r(),r(),r())), 
                      radius='1.5',
                      lowResolution= True,
                      # 0: low resolution 
