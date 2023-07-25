@@ -11,5 +11,6 @@ dependencies:
   - jupyter_client==7.3.2
   - tornado==6.1
   - nb_conda_kernels
+  - importlib_metadata
   - nglview
   - conda
