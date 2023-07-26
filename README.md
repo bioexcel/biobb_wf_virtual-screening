@@ -13,8 +13,6 @@ The tutorials will guide you through the process of identifying the **active sit
 
 ***
 
-> **Important:** At the time of publishing the current version, **autodock_vina has not been compiled for the new ARM mac M1/M2 chips**. So the vina.autodock_vina_run tool doesn't work in these computers.
-
 ## Settings
 
 ### Biobb modules used
