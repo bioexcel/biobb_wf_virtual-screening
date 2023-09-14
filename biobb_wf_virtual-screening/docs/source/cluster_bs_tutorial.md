@@ -219,7 +219,7 @@ from biobb_vs.utils.bindingsite import bindingsite
 output_bindingsite = "bindingsite.pdb"
 prop = {
     "ligand": ligand_code,
-    "matrix_name": "blosum62",
+    "matrix_name": "BLOSUM62",
     "gap_open": -10.0,
     "gap_extend": -0.5,
     "max_num_ligands": 15,
