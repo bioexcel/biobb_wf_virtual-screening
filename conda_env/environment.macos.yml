@@ -7,7 +7,5 @@ dependencies:
   - biobb_structure_utils==4.1.0
   - biobb_vs==4.1.1
   - biobb_chemistry==4.1.0
-  - nb_conda_kernels
-  - traitlets==5.9.0
+  - jupyter
   - nglview
-  - conda
