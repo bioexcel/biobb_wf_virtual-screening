@@ -15,3 +15,7 @@ biobb_wf_virtual-screening/notebooks/*/*/
 biobb_wf_virtual-screening/notebooks/*/*.web.ipynb
 biobb_wf_virtual-screening/notebooks/*/*.docs.ipynb
 biobb_wf_virtual-screening/notebooks/*/*.png
+biobb_wf_virtual-screening/docs/notebooks/
+biobb_wf_virtual-screening/html/cluster_bs/wf_vs_clusterBindingSite.web.ipynb
+biobb_wf_virtual-screening/html/ebi_api/wf_vs_ebi_api.web.ipynb
+biobb_wf_virtual-screening/html/fpocket/wf_vs_fpocket.web.ipynb
