@@ -21,7 +21,7 @@ Please note that **docking algorithms**, and in particular, **AutoDock Vina** pr
  - [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry): Tools to perform chemoinformatics processes.
  - [biobb_vs](https://github.com/bioexcel/biobb_vs): Tools to perform virtual screening studies.
  
-### Auxiliar libraries used
+### Auxiliary libraries used
 
 * [jupyter](https://jupyter.org/): Free software, open standards, and web services for interactive computing across all programming languages.
 * [nglview](http://nglviewer.org/#nglview): Jupyter/IPython widget to interactively view molecular structures and trajectories in notebooks.

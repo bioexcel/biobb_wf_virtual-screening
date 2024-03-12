@@ -22,7 +22,7 @@ The tutorials will guide you through the process of identifying the **active sit
 * [biobb_vs](https://github.com/bioexcel/biobb_vs): Tools to perform virtual screening studies.
 * [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry): Tools to perform chemistry over molecular dynamics simulations.
 
-### Auxiliar libraries used
+### Auxiliary libraries used
 
 * [jupyter](https://jupyter.org/): Free software, open standards, and web services for interactive computing across all programming languages.
 * [nglview](http://nglviewer.org/#nglview): Jupyter/IPython widget to interactively view molecular structures and trajectories in notebooks.
