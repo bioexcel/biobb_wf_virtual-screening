@@ -1,0 +1,33 @@
+ 
+{
+  "@context": "http://schema.org",
+  "name": "Protein-ligand Docking workflows",
+  "@type": "ItemList",
+  "itemListElement": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://raw.githubusercontent.com/bioexcel/biobb/master/references.jsonld",
+      "name": "biobb"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://raw.githubusercontent.com/bioexcel/biobb_io/master/references.jsonld",
+      "name": "biobb_io"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://raw.githubusercontent.com/bioexcel/biobb_structure_utils/master/references.jsonld",
+      "name": "biobb_structure_utils"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://raw.githubusercontent.com/bioexcel/biobb_vs/master/references.jsonld",
+      "name": "biobb_vs"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://raw.githubusercontent.com/bioexcel/biobb_chemistry/master/references.jsonld",
+      "name": "biobb_chemistry"
+    }
+  ]
+}
