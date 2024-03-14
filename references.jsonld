@@ -1,8 +1,9 @@
  
 {
   "@context": "http://schema.org",
-  "name": "Protein-ligand Docking workflows",
+  "@id": "https://github.com/bioexcel/biobb_wf_virtual-screening",
   "@type": "ItemList",
+  "name": "Protein-ligand Docking workflows",
   "itemListElement": [
     {
       "@type": "SoftwareApplication",
