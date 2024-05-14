@@ -1,5 +1,5 @@
 # Protein-ligand Docking tutorial using BioExcel Building Blocks (biobb)
-**-- *Fpocket Version* --**
+### -- *Fpocket Version* --
 
 ***
 This tutorial aims to illustrate the process of **protein-ligand docking**, step by step, using the **BioExcel Building Blocks library (biobb)**. The particular example used is the **Mitogen-activated protein kinase 14** (p38-α) protein (PDB code [3HEC](https://www.rcsb.org/structure/3HEC), [https://doi.org/10.2210/pdb3HEC/pdb](https://doi.org/10.2210/pdb3HEC/pdb)), a well-known **Protein Kinase enzyme**, 
@@ -62,6 +62,50 @@ jupyter-notebook biobb_wf_virtual-screening/notebooks/fpocket/wf_vs_fpocket.ipyn
 	title="Bioexcel2 logo" width="400" />
 ***
 
+
+## Initializing colab
+The two cells below are used only in case this notebook is executed via **Google Colab**. Take into account that, for running conda on **Google Colab**, the **condacolab** library must be installed. As [explained here](https://pypi.org/project/condacolab/), the installation requires a **kernel restart**, so when running this notebook in **Google Colab**, don't run all cells until this **installation** is properly **finished** and the **kernel** has **restarted**.
+
+
+```python
+# Only executed when using google colab
+import sys
+if 'google.colab' in sys.modules:
+  import subprocess
+  from pathlib import Path
+  try:
+    subprocess.run(["conda", "-V"], check=True)
+  except FileNotFoundError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "condacolab"], check=True)
+    import condacolab
+    condacolab.install()
+    # Clone repository
+    repo_URL = "https://github.com/bioexcel/biobb_wf_virtual-screening.git"
+    repo_name = Path(repo_URL).name.split('.')[0]
+    if not Path(repo_name).exists():
+      subprocess.run(["mamba", "install", "-y", "git"], check=True)
+      subprocess.run(["git", "clone", repo_URL], check=True)
+      print("⏬ Repository properly cloned.")
+    # Install environment
+    print("⏳ Creating environment...")
+    env_file_path = f"{repo_name}/conda_env/environment.yml"
+    subprocess.run(["mamba", "env", "update", "-n", "base", "-f", env_file_path], check=True)
+    print("🎨 Install NGLView dependencies...")
+    subprocess.run(["mamba", "install", "-y", "-c", "conda-forge", "nglview==3.0.8", "ipywidgets=7.7.2"], check=True)
+    print("👍 Conda environment successfully created and updated.")
+```
+
+
+```python
+# Enable widgets for colab
+if 'google.colab' in sys.modules:
+  from google.colab import output
+  output.enable_custom_widget_manager()
+  # Change working dir
+  import os
+  os.chdir("biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/fpocket")
+  print(f"📂 New working directory: {os.getcwd()}")
+```
 
 <a id="input"></a>
 ## Input parameters
@@ -177,7 +221,7 @@ Although in this particular example we already know the **binding site** region,
 <br>
 ***
 **Building Blocks** used:
- - [fpocket](https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run) from **biobb_vs.fpocket.fpocket_run**
+ - [fpocket_run](https://biobb-vs.readthedocs.io/en/latest/fpocket.html#module-fpocket.fpocket_run) from **biobb_vs.fpocket.fpocket_run**
 ***
 
 
@@ -193,9 +237,9 @@ prop = {
 }
 
 fpocket_run(input_pdb_path=pdb_protein,
-            output_pockets_zip = fpocket_all_pockets,
-            output_summary=fpocket_summary,
-            properties=prop)
+        output_pockets_zip = fpocket_all_pockets,
+        output_summary=fpocket_summary,
+        properties=prop)
 ```
 
 <a id="checkJson"></a>
@@ -278,7 +322,7 @@ r = lambda: random.randint(0,255)
 
 # load structure
 view = nglview.NGLWidget()
-c = view.add_component(pdb_protein)
+c = view.add_component(nglview.FileStructure(pdb_protein))
 
 # load cavities (d) and pockets (p) and create pocketNames list
 c = {}
@@ -291,10 +335,10 @@ for pock in path_pockets:
     if not [item for item in pocketNames if ('pocket' + i) in item]: pocketNames.append(('pocket' + i, int(i)))
 
     if suff == 'pdb':
-        c[i] = view.add_component(pock)
+        c[i] = view.add_component(filename=nglview.FileStructure(pock), **{'name': 'pocket' + i})
         c[i].clear()
     else:
-        p[i] = view.add_component(pock)
+        p[i] = view.add_component(filename=nglview.FileStructure(pock), **{'name': 'pocket' + i})
         p[i].clear()
 
 # sort pocket names
@@ -304,13 +348,14 @@ pocketNames.sort(key=lambda tup: tup[1])
 for pock in path_pockets_pdb:
     g = re.findall('(?:pocket)(\d+)(?:_\w+)\.(\w+)', pock)
     i = g[0][0]
-    c[i].add_surface(color='#{}'.format((r(),r(),r())), 
+    c[i].add_surface(color='#cc0000',
                      radius='1.5',
                      lowResolution= True,
                      # 0: low resolution 
                      smooth=1,
-                     useWorker= True,
-                     wrap= True)
+                     #useWorker= True,
+                     wrap= True
+                    )
     
 # representation for pockets
 for pock in path_pockets_pqr:
@@ -329,7 +374,7 @@ var view = this.stage.viewer;
 var clist_len = stage.compList.length;
 var i = 0;
 for(i = 0; i <= clist_len; i++){
-    if(stage.compList[i] != undefined && stage.compList[i].structure != undefined && stage.compList[i].object.name.indexOf('pqr') != -1) {        
+    if(stage.compList[i] != undefined && stage.compList[i].structure != undefined && stage.compList[i].parameters.ext === 'pqr') {        
 
         var elm = document.createElement("div");
         elm.innerText = 'pocket' + stage.compList[i].object.name.match(/\d+/g)
@@ -428,9 +473,9 @@ Visualizing the **protein structure**, the **selected cavity**, and the **genera
 
 ```python
 view = nglview.NGLWidget()
-s = view.add_component(download_pdb)
-b = view.add_component(output_box)
-p = view.add_component(fpocket_pocket)
+s = view.add_component(nglview.FileStructure(download_pdb))
+b = view.add_component(nglview.FileStructure(output_box))
+p = view.add_component(nglview.FileStructure(fpocket_pocket))
 p.clear()
 
 atomPair = [
@@ -475,7 +520,7 @@ p.add_surface(component=mdsel.value,
               smooth=1,
               contour=True,
               opacity=0.4,
-              useWorker= True,
+              #useWorker= True,
               wrap= True )
 
 
@@ -792,7 +837,8 @@ Note that outputs from **AutoDock Vina** don't contain all the atoms, as the pro
 view = nglview.NGLWidget()
 
 # v1 = Experimental Structure
-v1 = view.add_component(download_pdb)
+#v1 = view.add_component(download_pdb)
+v1 = view.add_component(nglview.FileStructure(download_pdb))
 
 v1.clear()
 v1.add_representation(repr_type='licorice', 
@@ -800,7 +846,8 @@ v1.add_representation(repr_type='licorice',
                      radius=0.5)
 
 # v2 = Docking result
-v2 = view.add_component(output_structure)
+#v2 = view.add_component(output_structure)
+v2 = view.add_component(nglview.FileStructure(output_structure))
 v2.clear()
 v2.add_representation(repr_type='cartoon', colorScheme = 'sstruc')
 v2.add_representation(repr_type='licorice', radius=0.5, color= 'green', selection='UNL')

@@ -1,5 +1,5 @@
 # Protein-ligand Docking tutorial using BioExcel Building Blocks (biobb)
-**-- *PDB Cluster90 Binding Site Version* --**
+### -- *PDB Cluster90 Binding Site Version* --
 
 ***
 This tutorial aims to illustrate the process of **protein-ligand docking**, step by step, using the **BioExcel Building Blocks library (biobb)**. The particular example used is the **Mitogen-activated protein kinase 14** (p38-α) protein (PDB code [3HEC](https://www.rcsb.org/structure/3HEC), [https://doi.org/10.2210/pdb3HEC/pdb](https://doi.org/10.2210/pdb3HEC/pdb)), a well-known **Protein Kinase enzyme**, 
@@ -20,21 +20,21 @@ Please note that **docking algorithms**, and in particular, **AutoDock Vina** pr
  - [biobb_structure_utils](https://github.com/bioexcel/biobb_structure_utils): Tools to modify or extract information from a PDB structure file.
  - [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry): Tools to perform chemoinformatics processes.
  - [biobb_vs](https://github.com/bioexcel/biobb_vs): Tools to perform virtual screening studies.
- 
+
 ### Auxiliary libraries used
 
 * [jupyter](https://jupyter.org/): Free software, open standards, and web services for interactive computing across all programming languages.
 * [nglview](http://nglviewer.org/#nglview): Jupyter/IPython widget to interactively view molecular structures and trajectories in notebooks.
 
-### Conda Installation and Launch
+### Conda Installation
 
 ```console
 git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
 cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
 conda activate biobb_VS_tutorial
-jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipynb
-``` 
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_clusterBindingSite.ipynb
+```
 
 ***
 ## Pipeline steps
@@ -62,6 +62,50 @@ jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipyn
 ***
 
 
+## Initializing colab
+The two cells below are used only in case this notebook is executed via **Google Colab**. Take into account that, for running conda on **Google Colab**, the **condacolab** library must be installed. As [explained here](https://pypi.org/project/condacolab/), the installation requires a **kernel restart**, so when running this notebook in **Google Colab**, don't run all cells until this **installation** is properly **finished** and the **kernel** has **restarted**.
+
+
+```python
+# Only executed when using google colab
+import sys
+if 'google.colab' in sys.modules:
+  import subprocess
+  from pathlib import Path
+  try:
+    subprocess.run(["conda", "-V"], check=True)
+  except FileNotFoundError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "condacolab"], check=True)
+    import condacolab
+    condacolab.install()
+    # Clone repository
+    repo_URL = "https://github.com/bioexcel/biobb_wf_virtual-screening.git"
+    repo_name = Path(repo_URL).name.split('.')[0]
+    if not Path(repo_name).exists():
+      subprocess.run(["mamba", "install", "-y", "git"], check=True)
+      subprocess.run(["git", "clone", repo_URL], check=True)
+      print("⏬ Repository properly cloned.")
+    # Install environment
+    print("⏳ Creating environment...")
+    env_file_path = f"{repo_name}/conda_env/environment.yml"
+    subprocess.run(["mamba", "env", "update", "-n", "base", "-f", env_file_path], check=True)
+    print("🎨 Install NGLView dependencies...")
+    subprocess.run(["mamba", "install", "-y", "-c", "conda-forge", "nglview==3.0.8", "ipywidgets=7.7.2"], check=True)
+    print("👍 Conda environment successfully created and updated.")
+```
+
+
+```python
+# Enable widgets for colab
+if 'google.colab' in sys.modules:
+  from google.colab import output
+  output.enable_custom_widget_manager()
+  # Change working dir
+  import os
+  os.chdir("biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/clusterBindingSite")
+  print(f"📂 New working directory: {os.getcwd()}")
+```
+
 <a id="input"></a>
 ## Input parameters
 **Input parameters** needed:
@@ -69,7 +113,7 @@ jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipyn
  - **pdb_code**: PDB code of the experimental complex structure (if exists).<br>
 In this particular example, the **p38α** structure in complex with the **Imatinib drug** was experimentally solved and deposited in the **PDB database** under the **3HEC** PDB code ([https://doi.org/10.2210/pdb3HEC/pdb](https://doi.org/10.2210/pdb3HEC/pdb)). The protein structure from this PDB file will be used as a **target protein** for the **docking process**, after stripping the **small molecule**. An **APO structure**, or any other structure from the **p38α** [cluster 100](https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22sequence%22%2C%22parameters%22%3A%7B%22target%22%3A%22pdb_protein_sequence%22%2C%22value%22%3A%22RPTFYRQELNKTIWEVPERYQNLSPVGSGAYGSVCAAFDTKTGLRVAVKKLSRPFQSIIHAKRTYRELRLLKHMKHENVIGLLDVFTPARSLEEFNDVYLVTHLMGADLNNIVKCQKLTDDHVQFLIYQILRGLKYIHSADIIHRDLKPSNLAVNEDCELKILDFGLARHTDDEMTGYVATRWYRAPEIMLNWMHYNQTVDIWSVGCIMAELLTGRTLFPGTDHIDQLKLILRLVGTPGAELLKKISSESARNYIQSLTQMPKMNFANVFIGANPLAVDLLEKMLVLDSDKRITAAQALAHAYFAQYHDPDDEPVADPYDQSFESRDLLIDEWKSLTYDEVISFVPPP%22%2C%22identity_cutoff%22%3A1%2C%22evalue_cutoff%22%3A0.1%7D%2C%22node_id%22%3A0%7D%2C%22return_type%22%3A%22polymer_entity%22%2C%22request_options%22%3A%7B%22pager%22%3A%7B%22start%22%3A0%2C%22rows%22%3A25%7D%2C%22scoring_strategy%22%3A%22combined%22%2C%22sort%22%3A%5B%7B%22sort_by%22%3A%22score%22%2C%22direction%22%3A%22desc%22%7D%5D%7D%2C%22request_info%22%3A%7B%22src%22%3A%22ui%22%2C%22query_id%22%3A%22bea5861f8b38a9e25a3e626b39d6bcbf%22%7D%7D) (sharing a 100% of sequence similarity with the **p38α** structure) could also be used as a **target protein**. This structure of the **protein-ligand complex** will be also used in the last step of the tutorial to check **how close** the resulting **docking pose** is from the known **experimental structure**. 
  -----
- - **ligandCode**: Ligand PDB code (3-letter code) for the small molecule (e.g. STI), DrugBank Ligand Code [DB00619](https://go.drugbank.com/drugs/DB00619).<br>
+ - **ligandCode**: Ligand PDB code (3-letter code) for the small molecule (e.g. STI, DrugBank Ligand Code [DB00619](https://go.drugbank.com/drugs/DB00619)).<br>
 In this particular example, the small molecule chosen for the tutorial is the FDA-approved drug **Imatinib** (PDB Code STI, DrugBank Ligand Code [DB00619](https://go.drugbank.com/drugs/DB00619)), a type of cancer growth blocker, used in [diferent types of leukemia](https://go.drugbank.com/drugs/DB00619).
 
 
@@ -245,7 +289,7 @@ view[0].add_representation(repr_type='cartoon',
                           opacity=.2,
                           color='#cccccc')
 
-view.add_component(output_bindingsite, default=False)
+view.add_component(nglview.FileStructure(output_bindingsite), default=False)
 view[1].add_representation(repr_type='surface', 
                            selection='*', 
                            opacity = .3,
@@ -253,7 +297,7 @@ view[1].add_representation(repr_type='surface',
                            lowResolution= True,
                            # 0: low resolution 
                            smooth=1,
-                           useWorker= True,
+                           #useWorker= True,
                            wrap= True)
 view[1].add_representation(repr_type='licorice', 
                         selection='*')
@@ -301,9 +345,9 @@ Visualizing the **protein structure**, the **selected cavity**, and the **genera
 #view = nglview.show_structure_file(box, default=False)
 view = nglview.NGLWidget()
 #s = view.add_component(pdb_single_chain)
-s = view.add_component(download_pdb)
-b = view.add_component(output_box)
-s = view.add_component(output_bindingsite)
+s = view.add_component(nglview.FileStructure(download_pdb))
+b = view.add_component(nglview.FileStructure(output_box))
+s = view.add_component(nglview.FileStructure(output_bindingsite))
 
 atomPair = [
     [ "9999:Z.ZN1", "9999:Z.ZN2" ],
@@ -350,7 +394,7 @@ s.add_representation(repr_type='surface',
                         surfaceType= 'av', 
                         contour=True,
                         opacity=0.4,
-                        useWorker= True,
+                        #useWorker= True,
                         wrap= True)
 
 
@@ -665,7 +709,7 @@ Note that outputs from **AutoDock Vina** don't contain all the atoms, as the pro
 view = nglview.NGLWidget()
 
 # v1 = Experimental Structure
-v1 = view.add_component(download_pdb)
+v1 = view.add_component(nglview.FileStructure(download_pdb))
 
 v1.clear()
 v1.add_representation(repr_type='licorice', 
@@ -673,7 +717,7 @@ v1.add_representation(repr_type='licorice',
                      radius=0.5)
 
 # v2 = Docking result
-v2 = view.add_component(output_structure)
+v2 = view.add_component(nglview.FileStructure(output_structure))
 v2.clear()
 v2.add_representation(repr_type='cartoon', colorScheme = 'sstruc')
 v2.add_representation(repr_type='licorice', radius=0.5, color= 'green', selection='UNL')
