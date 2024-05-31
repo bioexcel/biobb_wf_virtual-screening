@@ -1,11 +1,11 @@
-name: biobb_VS_tutorial
+name: biobb_wf_virtual-screening
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - biobb_io==4.1.1
-  - biobb_structure_utils==4.1.0
-  - biobb_vs==4.1.2
-  - biobb_chemistry==4.1.0
+  - biobb_io==4.2.0
+  - biobb_structure_utils==4.2.0
+  - biobb_vs==4.2.0
+  - biobb_chemistry==4.2.0
   - jupyter
   - nglview

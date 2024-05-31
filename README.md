@@ -33,7 +33,7 @@ The tutorials will guide you through the process of identifying the **active sit
 git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
 cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
-conda activate biobb_VS_tutorial
+conda activate biobb_wf_virtual-screening
 ```
 
 ### Launch
