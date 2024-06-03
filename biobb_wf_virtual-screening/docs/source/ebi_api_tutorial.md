@@ -33,7 +33,7 @@ git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
 cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
 conda activate biobb_wf_virtual-screening
-jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_ebi_api.ipynb
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/biobb_wf_virtual-screening_ebi_api.ipynb
 ```
 
 ***

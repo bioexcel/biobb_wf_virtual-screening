@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>wf_vs_clusterBindingSite.web</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>biobb_wf_virtual-screening_ebi_api.web</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7516,10 +7516,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Protein-ligand-Docking-tutorial-using-BioExcel-Building-Blocks-(biobb)">Protein-ligand Docking tutorial using BioExcel Building Blocks (biobb)<a class="anchor-link" href="#Protein-ligand-Docking-tutorial-using-BioExcel-Building-Blocks-(biobb)">¶</a></h1><h3 id="---PDB-Cluster90-Binding-Site-Version---">-- <em>PDB Cluster90 Binding Site Version</em> --<a class="anchor-link" href="#---PDB-Cluster90-Binding-Site-Version---">¶</a></h3><hr/>
-<p>This tutorial aims to illustrate the process of <strong>protein-ligand docking</strong>, step by step, using the <strong>BioExcel Building Blocks library (biobb)</strong>. The particular example used is the <strong>Mitogen-activated protein kinase 14</strong> (p38-α) protein (PDB code <a href="https://www.rcsb.org/structure/3HEC">3HEC</a>, <a href="https://doi.org/10.2210/pdb3HEC/pdb">https://doi.org/10.2210/pdb3HEC/pdb</a>), a well-known <strong>Protein Kinase enzyme</strong>,
-in complex with the FDA-approved <strong>Imatinib</strong>, (PDB Ligand code <a href="https://www.rcsb.org/ligand/STI">STI</a>, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB00619">DB00619</a>), a small molecule <strong>kinase inhibitor</strong> used to treat certain types of <strong>cancer</strong>.</p>
-<p>The tutorial will guide you through the process of identifying the <strong>active site cavity</strong> (pocket) without previous knowledge, and the final prediction of the <strong>protein-ligand complex</strong>.</p>
+<h1 id="Protein-ligand-Docking-tutorial-using-BioExcel-Building-Blocks-(biobb)">Protein-ligand Docking tutorial using BioExcel Building Blocks (biobb)<a class="anchor-link" href="#Protein-ligand-Docking-tutorial-using-BioExcel-Building-Blocks-(biobb)">¶</a></h1><h3 id="---PDBe-REST-API-Version---">-- <em>PDBe REST-API Version</em> --<a class="anchor-link" href="#---PDBe-REST-API-Version---">¶</a></h3><hr/>
+<p>This tutorial aims to illustrate the process of <strong>protein-ligand docking</strong>, step by step, using the <strong>BioExcel Building Blocks library (biobb)</strong>. The particular example used is the <strong>Mitogen-activated protein kinase 14</strong> (p38-α) protein (PDB code <a href="https://www.rcsb.org/structure/3LFA">3LFA</a>, <a href="https://doi.org/10.2210/pdb3LFA/pdb">https://doi.org/10.2210/pdb3LFA/pdb</a>), a well-known <strong>Protein Kinase enzyme</strong>,
+in complex with the FDA-approved <strong>Dasatinib</strong>, (PDB Ligand code <a href="https://www.rcsb.org/ligand/1N1">1N1</a>, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB01254">DB01254</a>), a small molecule <strong>kinase inhibitor</strong> used for the treatment of <strong>lymphoblastic</strong> or <strong>chronic myeloid leukemia</strong> with resistance or intolerance to prior therapy.</p>
+<p>The tutorial will guide you through the process of identifying the <strong>active site cavity</strong> (pocket) and the final prediction of the <strong>protein-ligand complex</strong>.</p>
 <p>Please note that <strong>docking algorithms</strong>, and in particular, <strong>AutoDock Vina</strong> program used in this tutorial, are <strong>non-deterministic</strong>. That means that results obtained when running the workflow <strong>could be diferent</strong> from the ones we obtained during the writing of this tutorial (see <a href="http://vina.scripps.edu/manual.html">AutoDock Vina manual</a>). We invite you to try the docking process several times to verify this behaviour.</p>
 <hr/>
 <div style="background:#b5e0dd; padding: 15px;"><strong>Important:</strong> it is recommended to execute this tutorial step by step (not as a single workflow execution, <strong><em>Run All</em></strong> mode), as it has interactive selections.</div>
@@ -7537,16 +7537,15 @@ in complex with the FDA-approved <strong>Imatinib</strong>, (PDB Ligand code <a 
 <span class="go">cd biobb_wf_virtual-screening</span>
 <span class="go">conda env create -f conda_env/environment.yml</span>
 <span class="go">conda activate biobb_wf_virtual-screening</span>
-<span class="go">jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_clusterBindingSite.ipynb</span>
+<span class="go">jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/biobb_wf_virtual-screening_ebi_api.ipynb</span>
 </pre></div>
 <hr/>
 <h2 id="Pipeline-steps">Pipeline steps<a class="anchor-link" href="#Pipeline-steps">¶</a></h2><ol>
 <li><a href="#input">Input Parameters</a></li>
 <li><a href="#fetch">Fetching PDB Structure</a></li>
 <li><a href="#extractProtein">Extract Protein Structure</a></li>
-<li><a href="#fpocket">Computing Protein Cavities (fpocket)</a></li>
-<li><a href="#fpocketFilter">Filtering Protein Cavities (fpocket output)</a></li>
-<li><a href="#fpocketSelect">Extract Pocket Cavity </a></li>
+<li><a href="#pdbe">Computing Protein Cavities (PDBe REST-API)</a></li>
+<li><a href="#pdbeSelect">Select Binding Site</a></li>
 <li><a href="#cavityBox">Generating Cavity Box </a></li>
 <li><a href="#downloadSmallMolecule">Downloading Small Molecule</a></li>
 <li><a href="#sdf2pdb">Converting Small Molecule</a></li>
@@ -7628,7 +7627,7 @@ in complex with the FDA-approved <strong>Imatinib</strong>, (PDB Ligand code <a 
   <span class="n">output</span><span class="o">.</span><span class="n">enable_custom_widget_manager</span><span class="p">()</span>
   <span class="c1"># Change working dir</span>
   <span class="kn">import</span> <span class="nn">os</span>
-  <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">"biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/clusterBindingSite"</span><span class="p">)</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">"biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/ebi_api"</span><span class="p">)</span>
   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"📂 New working directory: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -7646,12 +7645,12 @@ in complex with the FDA-approved <strong>Imatinib</strong>, (PDB Ligand code <a 
 <h2 id="Input-parameters">Input parameters<a class="anchor-link" href="#Input-parameters">¶</a></h2><p><strong>Input parameters</strong> needed:</p>
 <ul>
 <li><strong>pdb_code</strong>: PDB code of the experimental complex structure (if exists).<br/>
-In this particular example, the <strong>p38α</strong> structure in complex with the <strong>Imatinib drug</strong> was experimentally solved and deposited in the <strong>PDB database</strong> under the <strong>3HEC</strong> PDB code (<a href="https://doi.org/10.2210/pdb3HEC/pdb">https://doi.org/10.2210/pdb3HEC/pdb</a>). The protein structure from this PDB file will be used as a <strong>target protein</strong> for the <strong>docking process</strong>, after stripping the <strong>small molecule</strong>. An <strong>APO structure</strong>, or any other structure from the <strong>p38α</strong> <a href="https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22sequence%22%2C%22parameters%22%3A%7B%22target%22%3A%22pdb_protein_sequence%22%2C%22value%22%3A%22RPTFYRQELNKTIWEVPERYQNLSPVGSGAYGSVCAAFDTKTGLRVAVKKLSRPFQSIIHAKRTYRELRLLKHMKHENVIGLLDVFTPARSLEEFNDVYLVTHLMGADLNNIVKCQKLTDDHVQFLIYQILRGLKYIHSADIIHRDLKPSNLAVNEDCELKILDFGLARHTDDEMTGYVATRWYRAPEIMLNWMHYNQTVDIWSVGCIMAELLTGRTLFPGTDHIDQLKLILRLVGTPGAELLKKISSESARNYIQSLTQMPKMNFANVFIGANPLAVDLLEKMLVLDSDKRITAAQALAHAYFAQYHDPDDEPVADPYDQSFESRDLLIDEWKSLTYDEVISFVPPP%22%2C%22identity_cutoff%22%3A1%2C%22evalue_cutoff%22%3A0.1%7D%2C%22node_id%22%3A0%7D%2C%22return_type%22%3A%22polymer_entity%22%2C%22request_options%22%3A%7B%22pager%22%3A%7B%22start%22%3A0%2C%22rows%22%3A25%7D%2C%22scoring_strategy%22%3A%22combined%22%2C%22sort%22%3A%5B%7B%22sort_by%22%3A%22score%22%2C%22direction%22%3A%22desc%22%7D%5D%7D%2C%22request_info%22%3A%7B%22src%22%3A%22ui%22%2C%22query_id%22%3A%22bea5861f8b38a9e25a3e626b39d6bcbf%22%7D%7D">cluster 100</a> (sharing a 100% of sequence similarity with the <strong>p38α</strong> structure) could also be used as a <strong>target protein</strong>. This structure of the <strong>protein-ligand complex</strong> will be also used in the last step of the tutorial to check <strong>how close</strong> the resulting <strong>docking pose</strong> is from the known <strong>experimental structure</strong>.</li>
+In this particular example, the <strong>p38α</strong> structure in complex with the <strong>Dasatinib drug</strong> was experimentally solved and deposited in the <strong>PDB database</strong> under the <strong>3LFA</strong> PDB code, , <a href="https://doi.org/10.2210/pdb3LFA/pdb">https://doi.org/10.2210/pdb3LFA/pdb</a>. The protein structure from this PDB file will be used as a <strong>target protein</strong> for the <strong>docking process</strong>, after stripping the <strong>small molecule</strong>. An <strong>APO structure</strong>, or any other structure from the <strong>p38α</strong> <a href="https://www.rcsb.org/search?request=%7B%22query%22%3A%7B%22type%22%3A%22terminal%22%2C%22service%22%3A%22sequence%22%2C%22parameters%22%3A%7B%22target%22%3A%22pdb_protein_sequence%22%2C%22value%22%3A%22RPTFYRQELNKTIWEVPERYQNLSPVGSGAYGSVCAAFDTKTGLRVAVKKLSRPFQSIIHAKRTYRELRLLKHMKHENVIGLLDVFTPARSLEEFNDVYLVTHLMGADLNNIVKCQKLTDDHVQFLIYQILRGLKYIHSADIIHRDLKPSNLAVNEDCELKILDFGLARHTDDEMTGYVATRWYRAPEIMLNWMHYNQTVDIWSVGCIMAELLTGRTLFPGTDHIDQLKLILRLVGTPGAELLKKISSESARNYIQSLTQMPKMNFANVFIGANPLAVDLLEKMLVLDSDKRITAAQALAHAYFAQYHDPDDEPVADPYDQSFESRDLLIDEWKSLTYDEVISFVPPP%22%2C%22identity_cutoff%22%3A1%2C%22evalue_cutoff%22%3A0.1%7D%2C%22node_id%22%3A0%7D%2C%22return_type%22%3A%22polymer_entity%22%2C%22request_options%22%3A%7B%22pager%22%3A%7B%22start%22%3A0%2C%22rows%22%3A25%7D%2C%22scoring_strategy%22%3A%22combined%22%2C%22sort%22%3A%5B%7B%22sort_by%22%3A%22score%22%2C%22direction%22%3A%22desc%22%7D%5D%7D%2C%22request_info%22%3A%7B%22src%22%3A%22ui%22%2C%22query_id%22%3A%22bea5861f8b38a9e25a3e626b39d6bcbf%22%7D%7D">cluster 100</a> (sharing a 100% of sequence similarity with the <strong>p38α</strong> structure) could also be used as a <strong>target protein</strong>. This structure of the <strong>protein-ligand complex</strong> will be also used in the last step of the tutorial to check <strong>how close</strong> the resulting <strong>docking pose</strong> is from the known <strong>experimental structure</strong>.</li>
 </ul>
 <hr/>
 <ul>
-<li><strong>ligandCode</strong>: Ligand PDB code (3-letter code) for the small molecule (e.g. STI, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB00619">DB00619</a>).<br/>
-In this particular example, the small molecule chosen for the tutorial is the FDA-approved drug <strong>Imatinib</strong> (PDB Code STI, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB00619">DB00619</a>), a type of cancer growth blocker, used in <a href="https://go.drugbank.com/drugs/DB00619">diferent types of leukemia</a>.</li>
+<li><strong>ligandCode</strong>: Ligand PDB code (3-letter code) for the small molecule (e.g. 1N1, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB01254">DB01254</a>).<br/>
+In this particular example, the small molecule chosen for the tutorial is the FDA-approved drug <strong>Dasatinib</strong> (PDB Code 1N1, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB01254">DB01254</a>), a <strong>tyrosine kinase inhibitor</strong>, used in <a href="https://go.drugbank.com/drugs/DB01254">lymphoblastic or chronic myeloid leukemia</a>.</li>
 </ul>
 </div>
 </div>
@@ -7667,9 +7666,9 @@ In this particular example, the small molecule chosen for the tutorial is the FD
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">nglview</span>
 <span class="kn">import</span> <span class="nn">ipywidgets</span>
 
-<span class="n">pdb_code</span> <span class="o">=</span> <span class="s2">"3HEC"</span>         <span class="c1"># P38 + Imatinib</span>
+<span class="n">pdb_code</span> <span class="o">=</span> <span class="s2">"3LFA"</span>         <span class="c1"># P38 + Dasatinib</span>
 
-<span class="n">ligand_code</span> <span class="o">=</span> <span class="s2">"STI"</span>       <span class="c1"># Imatinib</span>
+<span class="n">ligand_code</span> <span class="o">=</span> <span class="s2">"1N1"</span>       <span class="c1"># Dasatinib</span>
 </pre></div>
 </div>
 </div>
@@ -7727,7 +7726,7 @@ Alternatively, a <strong>PDB file</strong> can be used as starting structure. <b
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><a id="vis3D"></a></p>
 <h3 id="Visualizing-3D-structure">Visualizing 3D structure<a class="anchor-link" href="#Visualizing-3D-structure">¶</a></h3><p>Visualizing the downloaded/given <strong>PDB structure</strong> using <strong>NGL</strong>.<br/><br/>
-Note (and try to identify) the <strong>Imatinib small molecule (STI)</strong> and the <strong>detergent (β-octyl glucoside) (BOG)</strong> used in the experimental reservoir solution to obtain the crystal.</p>
+Note (and try to identify) the <strong>Dasatinib small molecule (1N1)</strong> and the <strong>detergent (β-octyl glucoside) (BOG)</strong> used in the experimental reservoir solution to obtain the crystal.</p>
 </div>
 </div>
 </div>
@@ -7742,7 +7741,6 @@ Note (and try to identify) the <strong>Imatinib small molecule (STI)</strong> an
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_structure_file</span><span class="p">(</span><span class="n">download_pdb</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">view</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 <span class="n">view</span><span class="o">.</span><span class="n">_remote_call</span><span class="p">(</span><span class="s1">'setSize'</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">'Widget'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">''</span><span class="p">,</span><span class="s1">'600px'</span><span class="p">])</span>
-
 <span class="n">view</span>
 </pre></div>
 </div>
@@ -7820,10 +7818,12 @@ Note that the <strong>small molecules</strong> included in the original structur
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_structure_file</span><span class="p">(</span><span class="n">pdb_protein</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_structure_file</span><span class="p">(</span><span class="n">pdb_protein</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'cartoon'</span><span class="p">,</span> 
+                        <span class="n">selection</span><span class="o">=</span><span class="s1">'not het'</span><span class="p">,</span>
+                       <span class="n">colorScheme</span> <span class="o">=</span> <span class="s1">'atomindex'</span><span class="p">)</span>
 <span class="n">view</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 <span class="n">view</span><span class="o">.</span><span class="n">_remote_call</span><span class="p">(</span><span class="s1">'setSize'</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">'Widget'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">''</span><span class="p">,</span><span class="s1">'600px'</span><span class="p">])</span>
-
 <span class="n">view</span>
 </pre></div>
 </div>
@@ -7848,32 +7848,17 @@ Note that the <strong>small molecules</strong> included in the original structur
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><a id="bindingSite"></a></p>
+<p><a id="pdbe"></a></p>
 <hr/>
-<h2 id="Computing-Protein-Cavities-(Cluster90-Binding-Site)">Computing Protein Cavities (Cluster90 Binding Site)<a class="anchor-link" href="#Computing-Protein-Cavities-(Cluster90-Binding-Site)">¶</a></h2><p>Computing the <strong>protein cavities</strong> (pockets) using information from the <strong>PDB Cluster90</strong>. The <strong>PDB Cluster90</strong> is a collection derived from the <strong>PDB database</strong>, containing structures having <strong>less than 90% sequence identity</strong> to each other. The <strong>Cluster90 Binding Site</strong> is using information from all the structures of the <strong>Cluster90 collection</strong> for a particular <strong>input protein</strong> to discover the possible <strong>binding sites</strong> from <strong>small molecules</strong> attached to <strong>similar proteins</strong>. <br/></p>
+<h2 id="Computing-Protein-Cavities-(PDBe-REST-API)">Computing Protein Cavities (PDBe REST-API)<a class="anchor-link" href="#Computing-Protein-Cavities-(PDBe-REST-API)">¶</a></h2><p>Identifying the <strong>protein cavities</strong> (pockets) using the <a href="https://www.ebi.ac.uk/pdbe/api/doc/"><strong>PDBe REST-API</strong></a>.<br/></p>
 <p>These <strong>cavities</strong> will be then used in the <strong>docking procedure</strong> to try to find the <strong>best region of the protein surface</strong> where the small molecule can <strong>bind</strong>. <br/><br/>
-Although in this particular example we already know the <strong>binding site</strong> region, as we started from a <strong>protein-ligand complex</strong> structure where the ligand was located in the same <strong>binding site</strong> as <strong>Imatinib</strong> is binding, this is not always the case. In the cases where we do not know these regions, the <strong>Cluster90 binding site</strong> utility will help us identifying the possible <strong>binding sites</strong> of our <strong>target protein</strong>.<br/>
-<br/></p>
+Although in this particular example we already know the <strong>binding site</strong> region, as we started from a <strong>protein-ligand complex</strong> structure where the ligand was located in the same <strong>binding site</strong> as <strong>Dasatinib</strong> is binding, the <strong>PDBe REST-API</strong> can be used to automatically identify and extract the possible <strong>binding sites</strong> of our <strong>target protein</strong> from the PDB file annotations. This <strong>REST-API endpoint</strong> provides details on <strong>binding sites</strong> from the PDB files (or mmcif) information, such as <strong>ligands</strong>, <strong>residues in the site</strong> or <strong>description of the site</strong>. <br/></p>
 <hr/>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-io.readthedocs.io/en/latest/api.html#module-api.pdb_cluster_zip">pdb_cluster_zip</a> from <strong>biobb_io.api.pdb_cluster_zip</strong></li>
-<li><a href="https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.bindingsite">bindingsite</a> from <strong>biobb_vs.utils.bindingsite</strong></li>
+<li><a href="https://biobb-io.readthedocs.io/en/latest/api.html#module-api.api_binding_site">api_binding_site</a> from <strong>biobb_io.api.api_binding_site</strong></li>
 </ul>
 <hr/>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><a id="cluster90"></a></p>
-<h3 id="Getting-Cluster-90-collection">Getting Cluster 90 collection<a class="anchor-link" href="#Getting-Cluster-90-collection">¶</a></h3><p>Extracting the <strong>Cluster90</strong> collection from the input <strong>PDB structure</strong>. The collection will contain all the structures in the <strong>PDB database</strong> having <strong>less than 90% sequence identity</strong> to the input structure (our target protein).<br/><br/>
-<em>Please note that depending on the size of the cluster, the execution can take a while (minutes).</em></p>
 </div>
 </div>
 </div>
@@ -7885,17 +7870,15 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_io.api.pdb_cluster_zip</span> <span class="kn">import</span> <span class="n">pdb_cluster_zip</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_io.api.api_binding_site</span> <span class="kn">import</span> <span class="n">api_binding_site</span>
 
-<span class="n">pdb_cluster</span> <span class="o">=</span> <span class="s2">"pdb_cluster.zip"</span>
+<span class="n">residues_json</span> <span class="o">=</span> <span class="s2">"residues.json"</span>
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"pdb_code"</span><span class="p">:</span> <span class="n">pdb_code</span><span class="p">,</span>
-    <span class="s2">"filter"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ATOM"</span><span class="p">,</span> <span class="s2">"HETATM"</span><span class="p">],</span>
-    <span class="s2">"cluster"</span><span class="p">:</span> <span class="mi">90</span>
+  <span class="s2">"pdb_code"</span><span class="p">:</span> <span class="n">pdb_code</span>
 <span class="p">}</span>
 
-<span class="n">pdb_cluster_zip</span><span class="p">(</span><span class="n">output_pdb_zip_path</span> <span class="o">=</span> <span class="n">pdb_cluster</span><span class="p">,</span>
-            <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+<span class="n">api_binding_site</span><span class="p">(</span><span class="n">output_json_path</span><span class="o">=</span><span class="n">residues_json</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7908,14 +7891,8 @@ Although in this particular example we already know the <strong>binding site</st
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><a id="bindingsite"></a></p>
-<h3 id="Extracting-the-Cluster90-Binding-Site(s)">Extracting the Cluster90 Binding Site(s)<a class="anchor-link" href="#Extracting-the-Cluster90-Binding-Site(s)">¶</a></h3><p>Extracting the protein binding site(s) from the <strong>Cluster90</strong> collection. There are two ways in which the <strong>Cluster90 Binding Site</strong> can be used:</p>
-<ul>
-<li><strong>With information about the ligand</strong>: In this particular example we already know the <strong>ligand</strong> we want to dock, and also that the <strong>PDB database</strong> contain an <strong>experimental structure</strong> where the <strong>ligand</strong> was solved in <strong>complex</strong> with our protein of interest (<strong>p38-α Tyrosine kinase</strong>). In that case, the <strong>ligand id</strong> can be used to guide the <strong>binding site</strong> tool. <br/><br/></li>
-<li><strong>Without information about the ligand</strong>: If the docking study starts from a <strong>protein receptor</strong> with no information about the <strong>binding site</strong> or any known <strong>protein-ligand complex</strong>, the <strong>binding site</strong> tool can not be guided. Still, the tool should be able to extract <strong>binding site(s)</strong> information from <strong>similar proteins</strong> solved with <strong>small molecules</strong> attached (if any).<br/><br/></li>
-</ul>
-<p>This example is using the <strong>ligand id</strong> to guide the <strong>binding site tool</strong>, but we invite you to try and explore the differences in the output removing this <strong>input information</strong> (ligand property in the next building block).</p>
-<p>The <strong>Cluster90 binding site</strong> tool is internally running <strong>sequence alignments</strong> to structurally <strong>superpose</strong> the structures contained in the <strong>Cluster90 collection</strong> and extract the <strong>residue numbering</strong> corresponding to the <strong>binding site</strong> residues. Thus, <strong>sequence alignment parameters</strong> can be changed using building block input properties. In this example, we have chosen the well-known <strong>blosum62</strong> substitution matrix, with a <strong>penalty</strong> for opening a gap of -10.0, and a <strong>penalty</strong> to extend a gap of -0.5. The total number of <strong>superimposed ligands</strong> to be extracted from the cluster is limited at 15, and the <strong>cut-off distance</strong> around the ligand atoms to consider a residue to be part of a <strong>binding site</strong> is fixed at 5 Ångstroms.</p>
+<p><a id="checkJson"></a></p>
+<h3 id="Checking-binding-site-output-(json)">Checking binding site output (json)<a class="anchor-link" href="#Checking-binding-site-output-(json)">¶</a></h3><p>Checking the <strong>PDBe REST-API</strong> output from the <strong>json file</strong>. Every <strong>pocket</strong> has a separated entry in the json output, with information such as: <strong>residues forming the cavity, details of the cavity</strong>, and <strong>evidence used to detect the cavity</strong>.</p>
 </div>
 </div>
 </div>
@@ -7927,22 +7904,53 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.utils.bindingsite</span> <span class="kn">import</span> <span class="n">bindingsite</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
 
-<span class="n">output_bindingsite</span> <span class="o">=</span> <span class="s2">"bindingsite.pdb"</span>
-<span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"ligand"</span><span class="p">:</span> <span class="n">ligand_code</span><span class="p">,</span>
-    <span class="s2">"matrix_name"</span><span class="p">:</span> <span class="s2">"BLOSUM62"</span><span class="p">,</span>
-    <span class="s2">"gap_open"</span><span class="p">:</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">,</span>
-    <span class="s2">"gap_extend"</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="s2">"max_num_ligands"</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
-    <span class="s2">"radius"</span><span class="p">:</span> <span class="mi">5</span>
-<span class="p">}</span>
-
-<span class="n">bindingsite</span><span class="p">(</span><span class="n">input_pdb_path</span> <span class="o">=</span> <span class="n">pdb_protein</span><span class="p">,</span>
-            <span class="n">input_clusters_zip</span> <span class="o">=</span> <span class="n">pdb_cluster</span><span class="p">,</span>
-            <span class="n">output_pdb_path</span> <span class="o">=</span> <span class="n">output_bindingsite</span><span class="p">,</span>
-            <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">residues_json</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span> 
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><a id="pdbeSelect"></a></p>
+<h3 id="Select-binding-site-(cavity)">Select binding site (cavity)<a class="anchor-link" href="#Select-binding-site-(cavity)">¶</a></h3><p>Select a specific <strong>binding site</strong> (cavity) from the obtained list to be used in the <strong>docking procedure</strong>. <br/></p>
+<p>If the <strong>PDBe REST-API</strong> has successfully identified the correct <strong>binding site</strong>, which we know from the original <strong>protein-ligand structure</strong>, it just needs to be selected. In this particular example, the cavity we are interested in is the <strong>binding site number 1</strong>. <br/></p>
+<p>Choose a <strong>binding site</strong> from the <strong>DropDown list</strong>:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">bindingSites</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">bsites</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">pdb_code</span><span class="o">.</span><span class="n">lower</span><span class="p">()]):</span>
+    <span class="n">bindingSites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">bsites</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">'binding_site'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">'site_residues'</span><span class="p">]:</span>
+        <span class="n">bindingSites</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'author_residue_number'</span><span class="p">])</span>
+<span class="c1">#    print('Residue id\'s for binding site %d: %s' % (i, ', '.join(str(v) for v in bindingSites[i])))</span>
+        
+<span class="n">mdsel</span> <span class="o">=</span> <span class="n">ipywidgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span><span class="o">=</span><span class="n">bsites</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">'Binding Site:'</span><span class="p">,</span>
+    <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">mdsel</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7956,8 +7964,8 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><a id="viewPockets"></a></p>
-<h3 id="Visualizing-selected-pockets-(cavities)">Visualizing selected pockets (cavities)<a class="anchor-link" href="#Visualizing-selected-pockets-(cavities)">¶</a></h3><p>Visualizing the selected <strong>pockets</strong> (cavities) from the generated list using <strong>NGL viewer</strong>.<br/></p>
-<p><strong>Protein residues</strong> forming the <strong>cavity</strong> are shown in <strong>licorice</strong> representation. <strong>Pockets</strong> are represented in a <strong>greyish surface</strong>. The <strong>original ligand</strong> (if exists) is shown in <strong>green-colored ball and stick</strong> representation.</p>
+<h3 id="Visualizing-selected-binding-site-(cavity)">Visualizing selected binding site (cavity)<a class="anchor-link" href="#Visualizing-selected-binding-site-(cavity)">¶</a></h3><p>Visualizing the selected <strong>binding site</strong> (cavity) using <strong>NGL viewer</strong>.<br/></p>
+<p><strong>Protein residues</strong> forming the <strong>cavity</strong> are represented in <strong>pink-colored surface</strong>.</p>
 </div>
 </div>
 </div>
@@ -7971,33 +7979,20 @@ Although in this particular example we already know the <strong>binding site</st
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_structure_file</span><span class="p">(</span><span class="n">download_pdb</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># ligand</span>
-<span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'ball+stick'</span><span class="p">,</span> 
-                          <span class="n">selection</span><span class="o">=</span><span class="s1">'STI'</span><span class="p">,</span>
-                          <span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                          <span class="n">color</span><span class="o">=</span><span class="s1">'green'</span><span class="p">)</span>
-
-<span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'cartoon'</span><span class="p">,</span> 
+<span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'cartoon'</span><span class="p">,</span> 
                         <span class="n">selection</span><span class="o">=</span><span class="s1">'not het'</span><span class="p">,</span>
-                          <span class="n">opacity</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span>
-                          <span class="n">color</span><span class="o">=</span><span class="s1">'#cccccc'</span><span class="p">)</span>
+                        <span class="n">opacity</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s1">'#cccccc'</span><span class="p">)</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">nglview</span><span class="o">.</span><span class="n">FileStructure</span><span class="p">(</span><span class="n">output_bindingsite</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'surface'</span><span class="p">,</span> 
-                           <span class="n">selection</span><span class="o">=</span><span class="s1">'*'</span><span class="p">,</span> 
-                           <span class="n">opacity</span> <span class="o">=</span> <span class="mf">.3</span><span class="p">,</span>
-                           <span class="n">radius</span><span class="o">=</span><span class="s1">'1.5'</span><span class="p">,</span>
-                           <span class="n">lowResolution</span><span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                           <span class="c1"># 0: low resolution </span>
-                           <span class="n">smooth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                           <span class="c1">#useWorker= True,</span>
-                           <span class="n">wrap</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'licorice'</span><span class="p">,</span> 
-                        <span class="n">selection</span><span class="o">=</span><span class="s1">'*'</span><span class="p">)</span>
+<span class="n">view</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'surface'</span><span class="p">,</span> 
+                        <span class="n">selection</span><span class="o">=</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bindingSites</span><span class="p">[</span><span class="n">mdsel</span><span class="o">.</span><span class="n">value</span><span class="p">]),</span> 
+                        <span class="n">color</span><span class="o">=</span><span class="s1">'pink'</span><span class="p">,</span>
+                        <span class="n">lowResolution</span><span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="c1"># 0: low resolution </span>
+                        <span class="n">smooth</span><span class="o">=</span><span class="mi">1</span> <span class="p">)</span>
 
-<span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+<span class="n">view</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 <span class="n">view</span><span class="o">.</span><span class="n">_remote_call</span><span class="p">(</span><span class="s1">'setSize'</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">'Widget'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">''</span><span class="p">,</span><span class="s1">'600px'</span><span class="p">])</span>
-
 <span class="n">view</span>
 </pre></div>
 </div>
@@ -8029,7 +8024,7 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 <hr/>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
-<li><a href="https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box">box</a> from <strong>biobb_vs.utils.box</strong></li>
+<li><a href="https://biobb-vs.readthedocs.io/en/latest/utils.html#module-utils.box_residues">box_residues</a> from <strong>biobb_vs.utils.box_residues</strong></li>
 </ul>
 <hr/>
 </div>
@@ -8043,15 +8038,17 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.utils.box</span> <span class="kn">import</span> <span class="n">box</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">biobb_vs.utils.box_residues</span> <span class="kn">import</span> <span class="n">box_residues</span>
 
 <span class="n">output_box</span> <span class="o">=</span> <span class="s2">"box.pdb"</span>
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"resid_list"</span><span class="p">:</span> <span class="n">bindingSites</span><span class="p">[</span><span class="n">mdsel</span><span class="o">.</span><span class="n">value</span><span class="p">],</span>
     <span class="s2">"offset"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
     <span class="s2">"box_coordinates"</span><span class="p">:</span> <span class="kc">True</span>
 <span class="p">}</span>
 
-<span class="n">box</span><span class="p">(</span><span class="n">input_pdb_path</span> <span class="o">=</span> <span class="n">output_bindingsite</span><span class="p">,</span>
+<span class="n">box_residues</span><span class="p">(</span><span class="c1">#input_pdb_path = pdb_single_chain,</span>
+            <span class="n">input_pdb_path</span> <span class="o">=</span> <span class="n">download_pdb</span><span class="p">,</span>
             <span class="n">output_pdb_path</span> <span class="o">=</span> <span class="n">output_box</span><span class="p">,</span>
             <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
@@ -8067,7 +8064,7 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><a id="vis3D"></a></p>
-<h3 id="Visualizing-binding-site-box-in-3D-structure">Visualizing binding site box in 3D structure<a class="anchor-link" href="#Visualizing-binding-site-box-in-3D-structure">¶</a></h3><p>Visualizing the <strong>protein structure</strong>, the <strong>selected cavity</strong>, and the <strong>generated box</strong>, all together using <strong>NGL</strong> viewer. Using the <strong>original structure</strong> with the <strong>small ligand</strong> inside (Imatinib, <a href="https://www.rcsb.org/ligand/STI">STI</a>, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB00619">DB00619</a>), to check that the <strong>selected cavity</strong> is placed in the <strong>same region</strong> as the <strong>original ligand</strong>.</p>
+<h3 id="Visualizing-binding-site-box-in-3D-structure">Visualizing binding site box in 3D structure<a class="anchor-link" href="#Visualizing-binding-site-box-in-3D-structure">¶</a></h3><p>Visualizing the <strong>protein structure</strong>, the <strong>selected cavity</strong>, and the <strong>generated box</strong>, all together using <strong>NGL</strong> viewer. Using the <strong>original structure</strong> with the <strong>small ligand</strong> inside (Dasatinib, <a href="https://www.rcsb.org/ligand/1N1">1N1</a>, DrugBank Ligand Code <a href="https://go.drugbank.com/drugs/DB01254">DB01254</a>), to check that the <strong>selected cavity</strong> is placed in the <strong>same region</strong> as the <strong>original ligand</strong>.</p>
 </div>
 </div>
 </div>
@@ -8079,12 +8076,10 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#view = nglview.show_structure_file(box, default=False)</span>
-<span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">()</span>
-<span class="c1">#s = view.add_component(pdb_single_chain)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">view</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">NGLWidget</span><span class="p">()</span>
+
 <span class="n">s</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">nglview</span><span class="o">.</span><span class="n">FileStructure</span><span class="p">(</span><span class="n">download_pdb</span><span class="p">))</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">nglview</span><span class="o">.</span><span class="n">FileStructure</span><span class="p">(</span><span class="n">output_box</span><span class="p">))</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">nglview</span><span class="o">.</span><span class="n">FileStructure</span><span class="p">(</span><span class="n">output_bindingsite</span><span class="p">))</span>
 
 <span class="n">atomPair</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">[</span> <span class="s2">"9999:Z.ZN1"</span><span class="p">,</span> <span class="s2">"9999:Z.ZN2"</span> <span class="p">],</span>
@@ -8103,27 +8098,25 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
     <span class="p">[</span> <span class="s2">"9999:Z.ZN4"</span><span class="p">,</span> <span class="s2">"9999:Z.ZN8"</span> <span class="p">]</span>
 <span class="p">]</span>
 
-<span class="c1">#view.shape.add_cylinder( [ 0, 2, 7 ], [ 10, 0, 9 ], [ 1, 0, 0 ], 0.1 )</span>
-
 <span class="c1"># structure</span>
 <span class="n">s</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'cartoon'</span><span class="p">,</span> 
                         <span class="n">selection</span><span class="o">=</span><span class="s1">'not het'</span><span class="p">,</span>
                         <span class="n">color</span><span class="o">=</span><span class="s1">'#cccccc'</span><span class="p">,</span>
                        <span class="n">opacity</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
 <span class="c1"># ligands box</span>
-<span class="n">b</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'ball+stick'</span><span class="p">,</span> 
-                        <span class="n">selection</span><span class="o">=</span><span class="s1">'9999'</span><span class="p">,</span>
-                        <span class="n">color</span><span class="o">=</span><span class="s1">'pink'</span><span class="p">,</span>
-                       <span class="n">aspectRatio</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'ball+stick'</span><span class="p">,</span>
+                     <span class="n">selection</span><span class="o">=</span><span class="s1">'9999'</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span><span class="s1">'pink'</span><span class="p">,</span> 
+                     <span class="n">aspectRatio</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
 <span class="c1"># lines box</span>
 <span class="n">b</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'distance'</span><span class="p">,</span> 
-                        <span class="n">atomPair</span><span class="o">=</span> <span class="n">atomPair</span><span class="p">,</span>
-                       <span class="n">labelColor</span><span class="o">=</span> <span class="s1">'transparent'</span><span class="p">,</span>
-                       <span class="n">color</span><span class="o">=</span> <span class="s1">'black'</span><span class="p">)</span>
+                     <span class="n">atomPair</span><span class="o">=</span> <span class="n">atomPair</span><span class="p">,</span>
+                     <span class="n">labelVisible</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span> <span class="s1">'black'</span><span class="p">)</span>
 
-<span class="c1"># output bindingsite</span>
+<span class="c1"># residues</span>
 <span class="n">s</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'surface'</span><span class="p">,</span> 
-                        <span class="n">selection</span><span class="o">=</span><span class="s1">'*'</span><span class="p">,</span> 
+                        <span class="n">selection</span><span class="o">=</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bindingSites</span><span class="p">[</span><span class="n">mdsel</span><span class="o">.</span><span class="n">value</span><span class="p">]),</span> 
                         <span class="n">color</span><span class="o">=</span><span class="s1">'skyblue'</span><span class="p">,</span>
                         <span class="n">lowResolution</span><span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                         <span class="c1"># 0: low resolution </span>
@@ -8137,7 +8130,6 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 
 <span class="n">view</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 <span class="n">view</span><span class="o">.</span><span class="n">_remote_call</span><span class="p">(</span><span class="s1">'setSize'</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">'Widget'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">''</span><span class="p">,</span><span class="s1">'600px'</span><span class="p">])</span>
-
 <span class="n">view</span>
 </pre></div>
 </div>
@@ -8165,7 +8157,7 @@ An offset of <strong>12 Angstroms</strong> is used to generate a <strong>big eno
 <p><a id="downloadSmallMolecule"></a></p>
 <hr/>
 <h2 id="Downloading-Small-Molecule">Downloading Small Molecule<a class="anchor-link" href="#Downloading-Small-Molecule">¶</a></h2><p>Downloading the desired <strong>small molecule</strong> to be used in the <strong>docking procedure</strong>. <br/>
-In this particular example, the small molecule of interest is the FDA-approved drug <strong>Imatinib</strong>, with PDB code <strong>STI</strong>.<br/></p>
+In this particular example, the small molecule of interest is the FDA-approved drug <strong>Dasatinib</strong>, with PDB code <strong>1N1</strong>.<br/></p>
 <hr/>
 <p><strong>Building Blocks</strong> used:</p>
 <ul>
@@ -8376,9 +8368,10 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
     <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"auto"</span>
 <span class="p">}</span>
 
-<span class="n">str_check_add_hydrogens</span><span class="p">(</span><span class="n">input_structure_path</span> <span class="o">=</span> <span class="n">pdb_protein</span><span class="p">,</span>
+<span class="n">str_check_add_hydrogens</span><span class="p">(</span>
+            <span class="n">input_structure_path</span> <span class="o">=</span> <span class="n">pdb_protein</span><span class="p">,</span>
             <span class="n">output_structure_path</span> <span class="o">=</span> <span class="n">prep_receptor</span><span class="p">,</span>
-            <span class="n">properties</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="n">prop</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8459,7 +8452,6 @@ More info about <strong>PDBQT file format</strong> can be found in the <a href="
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">models</span> <span class="o">=</span> <span class="s1">'all'</span>
-<span class="c1">#models = '/0 or /1 or /4'</span>
 
 <span class="n">v0</span> <span class="o">=</span> <span class="n">nglview</span><span class="o">.</span><span class="n">show_structure_file</span><span class="p">(</span><span class="n">output_vina_pdbqt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">v0</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'licorice'</span><span class="p">,</span> 
@@ -8567,7 +8559,7 @@ Choose a <strong>docking pose</strong> from the <strong>DropDown list</strong>.<
 
 <span class="n">output_pdbqt_model</span> <span class="o">=</span> <span class="s2">"output_model.pdbqt"</span>
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"model"</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="s2">"model"</span><span class="p">:</span> <span class="n">mdsel</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="p">}</span>
 
 <span class="n">extract_model_pdbqt</span><span class="p">(</span><span class="n">input_pdbqt_path</span> <span class="o">=</span> <span class="n">output_vina_pdbqt</span><span class="p">,</span>
@@ -8653,7 +8645,8 @@ Choose a <strong>docking pose</strong> from the <strong>DropDown list</strong>.<
 
 <span class="n">output_structure</span> <span class="o">=</span> <span class="s2">"output_structure.pdb"</span>
 
-<span class="n">cat_pdb</span><span class="p">(</span><span class="n">input_structure1</span> <span class="o">=</span> <span class="n">pdb_protein</span><span class="p">,</span>
+<span class="n">cat_pdb</span><span class="p">(</span><span class="c1">#input_structure1 = pdb_single_chain,</span>
+        <span class="n">input_structure1</span> <span class="o">=</span> <span class="n">download_pdb</span><span class="p">,</span>
              <span class="n">input_structure2</span> <span class="o">=</span> <span class="n">output_pdb_model</span><span class="p">,</span>
              <span class="n">output_structure_path</span> <span class="o">=</span> <span class="n">output_structure</span><span class="p">)</span>
 </pre></div>
@@ -8694,7 +8687,7 @@ Choose a <strong>docking pose</strong> from the <strong>DropDown list</strong>.<
 
 <span class="n">v1</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">v1</span><span class="o">.</span><span class="n">add_representation</span><span class="p">(</span><span class="n">repr_type</span><span class="o">=</span><span class="s1">'licorice'</span><span class="p">,</span> 
-                     <span class="n">selection</span><span class="o">=</span><span class="s1">'STI'</span><span class="p">,</span>
+                     <span class="n">selection</span><span class="o">=</span><span class="s1">'[1N1]'</span><span class="p">,</span>
                      <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="c1"># v2 = Docking result</span>
@@ -8723,7 +8716,6 @@ Choose a <strong>docking pose</strong> from the <strong>DropDown list</strong>.<
 <span class="s2">"""</span>
 
 <span class="n">view</span><span class="o">.</span><span class="n">_execute_js_code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-
 <span class="n">view</span>
 </pre></div>
 </div>

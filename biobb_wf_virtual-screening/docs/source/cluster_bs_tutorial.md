@@ -33,7 +33,7 @@ git clone https://github.com/bioexcel/biobb_wf_virtual-screening.git
 cd biobb_wf_virtual-screening
 conda env create -f conda_env/environment.yml
 conda activate biobb_wf_virtual-screening
-jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/wf_vs_clusterBindingSite.ipynb
+jupyter-notebook biobb_wf_virtual-screening/notebooks/ebi_api/biobb_wf_virtual-screening_cluster_bs.ipynb
 ```
 
 ***
@@ -102,7 +102,7 @@ if 'google.colab' in sys.modules:
   output.enable_custom_widget_manager()
   # Change working dir
   import os
-  os.chdir("biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/clusterBindingSite")
+  os.chdir("biobb_wf_virtual-screening/biobb_wf_virtual-screening/notebooks/cluster_bs")
   print(f"📂 New working directory: {os.getcwd()}")
 ```
 
