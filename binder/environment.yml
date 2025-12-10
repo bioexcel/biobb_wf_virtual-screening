@@ -7,4 +7,7 @@ dependencies:
   - biobb_structure_utils==5.1.0
   - biobb_vs==5.1.0
   - biobb_chemistry==5.1.0
+  - jupyterlab=3.6
+  - nodejs=16
+  - ipywidgets=7
   - nglview
