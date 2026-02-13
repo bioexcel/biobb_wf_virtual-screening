@@ -8,4 +8,4 @@ dependencies:
   - biobb_vs==5.2.0
   - biobb_chemistry==5.2.0
   - jupyter
-  - nglview
+  - nglview<=4.0
